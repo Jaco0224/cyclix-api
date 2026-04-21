@@ -28,11 +28,11 @@ services:
       mariadb:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/cyclix
-      SPRING_DATASOURCE_USERNAME: cyclix
-      SPRING_DATASOURCE_PASSWORD: RELLENAR_PASSWORD_USUARIO
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/DB_cyclix
+      SPRING_DATASOURCE_USERNAME: cyclix_admin
+      SPRING_DATASOURCE_PASSWORD: cyclix10
     ports:
-      - "8080:8080"
+      - "6060:6060"
 
 volumes:
   mariadb_data:

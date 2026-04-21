@@ -1,5 +1,7 @@
 package com.cyclix.cyclix_api.auth.service
 
+import com.cyclix.cyclix_api.auth.dto.AuthResponse
+import com.cyclix.cyclix_api.auth.dto.LoginRequest
 import com.cyclix.cyclix_api.auth.dto.RegisterRequest
 import com.cyclix.cyclix_api.user.RoleRepository
 import com.cyclix.cyclix_api.user.User
@@ -8,13 +10,15 @@ import com.cyclix.cyclix_api.user.UserStatusRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class AuthService(
     private val userRepository: UserRepository,
     private val roleRepository: RoleRepository,
     private val userStatusRepository: UserStatusRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val jwtService: JwtService
 ) {
     @Transactional
     fun register(request: RegisterRequest): Long {
@@ -42,5 +46,27 @@ class AuthService(
         )
 
         return userRepository.save(user).id
+    }
+
+    @Transactional
+    fun login(request: LoginRequest): AuthResponse {
+        val normalizedEmail = request.email.trim().lowercase()
+        val user = userRepository.findByEmail(normalizedEmail)
+            .orElseThrow { IllegalArgumentException("Credenciales inválidas") }
+
+        val rawPassword = request.password ?: throw IllegalArgumentException("La contraseña es obligatoria")
+        if (!passwordEncoder.matches(rawPassword, user.passwordHash)) {
+            throw IllegalArgumentException("Credenciales inválidas")
+        }
+
+        user.lastLoginAt = LocalDateTime.now()
+        val token = jwtService.generateToken(user)
+
+        return AuthResponse(
+            token = token,
+            expiresIn = jwtService.expirationSeconds,
+            userId = user.id,
+            email = user.email
+        )
     }
 }

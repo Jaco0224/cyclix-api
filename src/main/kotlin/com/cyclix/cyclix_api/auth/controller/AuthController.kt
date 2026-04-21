@@ -1,5 +1,7 @@
 package com.cyclix.cyclix_api.auth.controller
 
+import com.cyclix.cyclix_api.auth.dto.AuthResponse
+import com.cyclix.cyclix_api.auth.dto.LoginRequest
 import com.cyclix.cyclix_api.auth.dto.RegisterRequest
 import com.cyclix.cyclix_api.auth.service.AuthService
 import jakarta.validation.Valid
@@ -25,4 +27,8 @@ class AuthController(
             "userId" to userId
         )
     }
+
+    @PostMapping("/login")
+    fun login(@Valid @RequestBody request: LoginRequest): AuthResponse =
+        authService.login(request)
 }
