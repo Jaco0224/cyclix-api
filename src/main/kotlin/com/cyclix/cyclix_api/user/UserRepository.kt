@@ -7,4 +7,5 @@ import com.cyclix.cyclix_api.user.User
 interface UserRepository : JpaRepository<User, Long> {
     fun existsByEmail(email: String): Boolean
     fun findByEmail(email: String): Optional<User>
+    fun findAllByOrderByIdAsc(): List<User>
 }

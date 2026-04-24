@@ -4,6 +4,7 @@ import com.cyclix.cyclix_api.auth.dto.AuthResponse
 import com.cyclix.cyclix_api.auth.dto.LoginRequest
 import com.cyclix.cyclix_api.auth.dto.RegisterRequest
 import com.cyclix.cyclix_api.auth.service.AuthService
+import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@SecurityRequirements
 class AuthController(
     private val authService: AuthService
 ) {

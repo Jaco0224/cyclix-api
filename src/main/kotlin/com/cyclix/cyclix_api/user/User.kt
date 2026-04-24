@@ -19,7 +19,7 @@ class User (
     @Column(nullable = false, unique = true, length = 150)
     var email: String,
 
-    @Column(name = "phone", length = 30)
+    @Column(name = "phone", length = 8)
     var phone: String? = null,
 
     @Column(name = "password_hash", nullable = false, length = 255)
